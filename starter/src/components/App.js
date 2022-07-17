@@ -2,20 +2,12 @@
 import { useState, useEffect } from "react";
 import "../css/App.css";
 import ListBooks from "./ListBooks";
-import * as BooksAPI from "../utils/BooksAPI";
+
 
 function App() {
-  const [books, setBooks] = useState([]);
+
   const [showSearchPage, setShowSearchpage] = useState(false);
 
-  useEffect(() => {
-    const getBooks = async () => {
-      const res = await BooksAPI.getAll();
-      setBooks(res);
-    };
-
-    getBooks();
-  }, []);
 
   return (
     <div className="app">
@@ -39,7 +31,7 @@ function App() {
             <ol className="books-grid"></ol>
           </div>
         </div>
-      ) : <ListBooks books={books}/>}
+      ) : <ListBooks />}
     </div>
   );
 }
