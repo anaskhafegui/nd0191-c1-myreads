@@ -3,7 +3,7 @@
 const BookShelf = ({title ,books,onEventChange}) => {
         
 
-    return (
+ if  (!books.error){ return (
 <div className="bookshelf">
 <h2 className="bookshelf-title">{title}</h2>
 <div className="bookshelf-books">
@@ -24,14 +24,14 @@ const BookShelf = ({title ,books,onEventChange}) => {
             }}
           ></div>
           <div className="book-shelf-changer">
-            <select defaultValue={'DEFAULT'}  onChange={(event) => onEventChange(event,book)}>
+            <select defaultValue={'DEFAULT'} selected onChange={(event) => onEventChange(event,book)}>
               <option value="DEFAULT" disabled>
                 Move to...
               </option>
               <option value="currentlyReading">
                 Currently Reading
               </option>
-              <option value="wantToRead">Want to Read</option>
+              <option  value="wantToRead">Want to Read</option>
               <option value="read">Read</option>
               <option value="none">None</option>
             </select>
@@ -47,6 +47,7 @@ const BookShelf = ({title ,books,onEventChange}) => {
 </div>
 </div>
 
-    );
+    ) }
+    else return  "No Result";
 }
 export default BookShelf;
