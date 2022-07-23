@@ -5,13 +5,10 @@ import ListBooks from "./ListBooks";
 import BookShelf from "./BookShelf";
 import * as BooksAPI from "../utils/BooksAPI";
 
-
 function App() {
 
   const [showSearchPage, setShowSearchpage] = useState(false);
   const [filterdBooks, setfilterdBooks] = useState([]);
-
-  const [books, setBooks] = useState([]);
   const [currentlyReading , setcurrentlyReading] = useState([]); 
   const [readBefore , setreadBefore] =  useState([]);
   const [wantToRead , setwantToRead] =  useState([]);
@@ -19,78 +16,48 @@ function App() {
   useEffect(() => {
     const getBooks = async () => {
       const res = await BooksAPI.getAll();
-      setBooks(res);
-
       setcurrentlyReading(res.filter(book =>  book.shelf === "currentlyReading" ));
       setreadBefore(res.filter(book =>  book.shelf === "read" ));
       setwantToRead(res.filter(book =>  book.shelf === "wantToRead" ));
-   
     };
 
     getBooks();
   }, []);
 
   const updateCurrentStatus = (event,book) => {
-    
     setcurrentlyReading(currentlyReading.filter((e) =>  e.id != book.id));
     setreadBefore(readBefore.filter((e) =>  e.id != book.id));
     setwantToRead(wantToRead.filter((e) =>  e.id != book.id)); 
 
     if(event.target.value === "currentlyReading"){
-
       BooksAPI.update(book,"currentlyReading");
-
-      setcurrentlyReading(  (currentlyReading) => [...currentlyReading, book ] );
-
+      setcurrentlyReading((currentlyReading) => [...currentlyReading, book]);
     }
     if (event.target.value === "wantToRead"){
-
-      BooksAPI.update(book,"read");
-
-      setreadBefore(  (readBefore) => [...readBefore, book ] );
-
+        BooksAPI.update(book,"read");
+        setreadBefore(  (readBefore) => [...readBefore, book ]);
     }
      if (event.target.value === "read"){
-
-      BooksAPI.update(book,"wantToRead");
-
-      setwantToRead(  (wantToRead) => [...wantToRead, book ] );
-    }
-    
+        BooksAPI.update(book,"wantToRead");
+        setwantToRead(  (wantToRead) => [...wantToRead, book ]);
+    } 
   }
-
-
-
-
   const onSearchChange = (event) => {
-   
     const Query = event.target.value;
- 
     const getBooks = async () => {
-      const res = await BooksAPI.search(Query,10);  
-      console.log(res);
- 
-     setfilterdBooks(res);
-     
+          const res = await BooksAPI.search(Query,10);  
+          setfilterdBooks(res);
     };
     Query != "" ? getBooks() :setfilterdBooks([]);
-
-    
   }
-
-
-
-  
   return (
-
     <div className="app">
       {showSearchPage ? (
         <div className="search-books">
           <div className="search-books-bar">
             <a
               className="close-search"
-              onClick={() => setShowSearchpage(!showSearchPage)}
-            >
+              onClick={() => setShowSearchpage(!showSearchPage)}>
               Close
             </a>
             <div className="search-books-input-wrapper">
