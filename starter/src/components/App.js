@@ -13,6 +13,7 @@ function App() {
   const [readBefore , setreadBefore] =  useState([]);
   const [wantToRead , setwantToRead] =  useState([]);
 
+
   useEffect(() => {
     const getBooks = async () => {
       const res = await BooksAPI.getAll();
@@ -20,11 +21,11 @@ function App() {
       setreadBefore(res.filter(book =>  book.shelf === "read" ));
       setwantToRead(res.filter(book =>  book.shelf === "wantToRead" ));
     };
-
     getBooks();
   }, []);
 
   const updateCurrentStatus = (event,book) => {
+
     setcurrentlyReading(currentlyReading.filter((e) =>  e.id != book.id));
     setreadBefore(readBefore.filter((e) =>  e.id != book.id));
     setwantToRead(wantToRead.filter((e) =>  e.id != book.id)); 
@@ -34,19 +35,24 @@ function App() {
       setcurrentlyReading((currentlyReading) => [...currentlyReading, book]);
     }
     if (event.target.value === "wantToRead"){
-        BooksAPI.update(book,"read");
-        setreadBefore(  (readBefore) => [...readBefore, book ]);
+        BooksAPI.update(book,"wantToRead");
+        setwantToRead((wantToRead) => [...wantToRead, book ]);  
     }
      if (event.target.value === "read"){
-        BooksAPI.update(book,"wantToRead");
-        setwantToRead(  (wantToRead) => [...wantToRead, book ]);
+        BooksAPI.update(book,"read");
+        setreadBefore((read) => [...read, book ]);
     } 
+    if (event.target.value === "none"){
+      BooksAPI.update(book,"none");
+      
+  } 
   }
-  const onSearchChange = (event) => {
+    const onSearchChange = (event) => {
     const Query = event.target.value;
     const getBooks = async () => {
-          const res = await BooksAPI.search(Query,10);  
-          setfilterdBooks(res);
+          const res = await BooksAPI.search(Query,10);
+          var filterd = !res.error ? res.map((book) => BooksAPI.get(book.id)) : [];
+          setfilterdBooks(await Promise.all(filterd));
     };
     Query != "" ? getBooks() :setfilterdBooks([]);
   }

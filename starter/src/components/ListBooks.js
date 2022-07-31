@@ -11,8 +11,8 @@ const ListBooks = ({currentlyReading,readBefore,wantToRead,updateStatus}) => {
               <div className="list-books-content">
                 <div>
                 <BookShelf title="currently Reading" books={currentlyReading}  onEventChange={updateStatus}/>
-                <BookShelf title ="Want To Read" books={readBefore} onEventChange={updateStatus}/>
-                <BookShelf title = "Read" books={wantToRead} onEventChange={updateStatus}/>
+                <BookShelf title ="Want To Read" books={wantToRead} onEventChange={updateStatus}/>
+                <BookShelf title ="Read" books={readBefore} onEventChange={updateStatus}/>
                 </div>
               </div>
  
