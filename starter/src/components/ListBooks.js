@@ -15,9 +15,7 @@ const ListBooks = ({currentlyReading,readBefore,wantToRead,updateStatus}) => {
                 <BookShelf title ="Read" books={readBefore} onEventChange={updateStatus}/>
                 </div>
               </div>
- 
             </div>
-          
     );
 
 };

@@ -38,14 +38,13 @@ function App() {
         BooksAPI.update(book,"wantToRead");
         setwantToRead((wantToRead) => [...wantToRead, book ]);  
     }
-     if (event.target.value === "read"){
+    if (event.target.value === "read"){
         BooksAPI.update(book,"read");
         setreadBefore((read) => [...read, book ]);
     } 
     if (event.target.value === "none"){
       BooksAPI.update(book,"none");
-      
-  } 
+    } 
   }
     const onSearchChange = (event) => {
     const Query = event.target.value;
@@ -54,7 +53,7 @@ function App() {
           var filterd = !res.error ? res.map((book) => BooksAPI.get(book.id)) : [];
           setfilterdBooks(await Promise.all(filterd));
     };
-    Query != "" ? getBooks() :setfilterdBooks([]);
+    Query.length > 0 ? getBooks() :setfilterdBooks([]);
   }
   return (
     <div className="app">
