@@ -32,18 +32,21 @@ function App() {
 
     if(event.target.value === "currentlyReading"){
       BooksAPI.update(book,"currentlyReading");
+      book.shelf = "currentlyReading";
       setcurrentlyReading((currentlyReading) => [...currentlyReading, book]);
     }
     if (event.target.value === "wantToRead"){
-        BooksAPI.update(book,"wantToRead");
+       BooksAPI.update(book,"wantToRead");
+        book.shelf = "wantToRead";
         setwantToRead((wantToRead) => [...wantToRead, book ]);  
     }
     if (event.target.value === "read"){
         BooksAPI.update(book,"read");
+        book.shelf = "read";
         setreadBefore((read) => [...read, book ]);
     } 
     if (event.target.value === "none"){
-      BooksAPI.update(book,"none");
+        BooksAPI.update(book,"none");
     } 
   }
     const onSearchChange = (event) => {
