@@ -9,6 +9,7 @@ function App() {
 
   const [showSearchPage, setShowSearchpage] = useState(false);
   const [filterdBooks, setfilterdBooks] = useState([]);
+  const [searchField, setsearchField]  = useState('');
   const [currentlyReading , setcurrentlyReading] = useState([]); 
   const [readBefore , setreadBefore] =  useState([]);
   const [wantToRead , setwantToRead] =  useState([]);
@@ -24,11 +25,26 @@ function App() {
     getBooks();
   }, []);
 
+  useEffect(() => {
+    const getBooks = async () => {
+            const res = await BooksAPI.search(searchField,10);
+            var filterd = !res.error ? res.map((book) => BooksAPI.get(book.id)) : [];
+            setfilterdBooks(await Promise.all(filterd));
+    };
+    if(searchField.length > 0) getBooks();
+    else {
+      console.log(searchField);
+      setTimeout(() => {
+        setfilterdBooks([]);
+    }, 2000);   
+  }
+  }, [searchField]);
+
   const updateCurrentStatus = (event,book) => {
 
-    setcurrentlyReading(currentlyReading.filter((e) =>  e.id != book.id));
-    setreadBefore(readBefore.filter((e) =>  e.id != book.id));
-    setwantToRead(wantToRead.filter((e) =>  e.id != book.id)); 
+    setcurrentlyReading(currentlyReading.filter((e) =>  e.id !== book.id));
+    setreadBefore(readBefore.filter((e) =>  e.id !== book.id));
+    setwantToRead(wantToRead.filter((e) =>  e.id !== book.id)); 
 
     if(event.target.value === "currentlyReading"){
       BooksAPI.update(book,"currentlyReading");
@@ -49,15 +65,10 @@ function App() {
         BooksAPI.update(book,"none");
     } 
   }
-    const onSearchChange = (event) => {
-    const Query = event.target.value;
-    const getBooks = async () => {
-          const res = await BooksAPI.search(Query,10);
-          var filterd = !res.error ? res.map((book) => BooksAPI.get(book.id)) : [];
-          setfilterdBooks(await Promise.all(filterd));
-    };
-    Query.length > 0 ? getBooks() :setfilterdBooks([]);
-  }
+    const onSearchChange = event => {
+       const searchFieldString = event.target.value.trim();
+       setsearchField(searchFieldString);
+    }
   return (
     <div className="app">
       {showSearchPage ? (
